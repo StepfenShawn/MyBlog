@@ -6,6 +6,9 @@
   <title>Shawn's blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link rel="stylesheet" href="/style/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="js/database_create.js"></script>
 </head>
 
 <body>
@@ -43,6 +46,7 @@
             <div class="article-inner">
               <div class="all-article-link"></div>
               <footer class="article-footer">
+                <div id="article-link-list"></div>
                 <a data-url="http://example.com/2022/11/30/hello-world/"
                     data-id="clb3pcdef0000u0fee9t69glm" class="article-share-link">Share</a>
               </footer>
@@ -55,11 +59,11 @@
             <h3 class="widget-title">Archives</h3>
               <div class="widget">
                 <ul class="archive-list">
-                  <li class="archive-list-item"><a class="archive-list-link"
-                            href="/archives/2022/11.html">November 2022</a>
+                  <li class="archive-list-item">
+                    <a class="archive-list-link" href="javascript: change_ctx_by_month('November-2022');">November 2022</a>
                   </li>
-                  <li class="archive-list-item"><a class="archive-list-link"
-                        href="/archives/2022/12.html">December 2022</a>
+                  <li class="archive-list-item">
+                    <a class="archive-list-link" href="javascript: change_ctx_by_month('December-2022');">December 2022</a>
                   </li>
                 </ul>
               </div>
@@ -70,7 +74,7 @@
               <div class="widget">
                 <ul>
                   <li>
-                    <a href="archives/2022/11/30/hello-world.html">Hello World</a>
+                    <a href="javascript:change_ctx_by_name('archives/2022/11/30/hello-world');">hello-world</a>
                   </li>
                 </ul>
               </div>
