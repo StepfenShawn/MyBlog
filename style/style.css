@@ -69,6 +69,7 @@ body {
   #container {
     height: 100%;
   }
+  
   body {
     background: #eee;
     font: 14px -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
@@ -175,6 +176,7 @@ body {
     border: 1px solid #ddd;
     border-radius: 3px;
   }
+  
   .article-entry h1,
   .widget h1 {
     font-size: 2em;
@@ -323,6 +325,17 @@ body {
     margin-right: 20px;
     margin-bottom:10px;
   }
+
+  .card_img:hover {
+    animation:avatar_anim 2s;
+  }
+
+  @keyframes avatar_anim {
+    0% {transform: rotateZ(0deg);}
+    50% {transform: rotateZ(270deg);}
+    100% {transform: rotateZ(0deg);}
+  }
+  
   .card_name {
     margin-left: 5px;
     font-size: 3vh;

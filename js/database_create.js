@@ -12,6 +12,7 @@ function dp_create() {
  * 从表中插入数据
  * @param {String} e_date : 博客日期
  * @param {String} e_url  : 博客地址
+ * @param {String} e_title : 博客标题
  */
 function insert(e_date, e_url, e_title) {
   db.transaction(function (tx) {
@@ -36,6 +37,11 @@ function query_all() {
 }
 
 dp_create();
+/**
+ * TODO : auto insert after create markdown file
+ */
+insert("2022/11/30", "2022/11/30/hello-world.md", "Hello World");
+
 // query_all();
 
 // Markdown parser
@@ -60,21 +66,22 @@ function ajax_parser() {
     xmlhttp = new ActiveXObject('Microsoft.XMLHttp');
   }
 
-  xmlhttp.onreadystatechange = () => {
-  if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-    var obj = document.getElementById('Markdown');
-    obj.innerHTML = marked.marked(xmlhttp.responseText);
-  }
-  }
   console.log(f.getAttribute('value'));
   // 向服务器发送请求
   xmlhttp.open('GET', f.getAttribute('value'), true);
   xmlhttp.send();
+  xmlhttp.onreadystatechange = () => {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+      var obj = document.getElementById('Markdown');
+      obj.innerHTML = marked.marked(xmlhttp.responseText);
+    }
+  }
 }
 
 function change_ctx_by_month(months) {
   /**
-   * <div id="Markdown">
+   * 
+  <div id="Markdown">
   </div>
   <!--创建表单-->
   <form id = "form" action="" method="post" value = "hello-world.md">
