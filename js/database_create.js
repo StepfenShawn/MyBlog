@@ -13,10 +13,11 @@ function dp_create() {
  * @param {String} e_date : 博客日期
  * @param {String} e_url  : 博客地址
  * @param {String} e_title : 博客标题
+ * @param {String} e_category : 博客分类
  */
-function insert(e_date, e_url, e_title) {
+function insert(e_date, e_url, e_title, e_category) {
   db.transaction(function (tx) {
-    tx.executeSql('INSERT INTO BLOGS VALUES (?, ?)', [e_date, e_url, e_title]);
+    tx.executeSql('INSERT INTO BLOGS VALUES (?, ?, ?, ?)', [e_date, e_url, e_title, e_category]);
   });
 }
 
@@ -36,11 +37,20 @@ function query_all() {
   return result;
 }
 
+/**
+ * 创建索引, 快速查询
+ */
+function create_index() {
+  db.transaction(function (tx) {
+    tx.executeSql('CREATE INDEX DATE_INDEX');
+    tx.executeSql('CREATE INDEX CATEGORY_INDEX');
+  });
+}
 dp_create();
 /**
  * TODO : auto insert after create markdown file
  */
-insert("2022/11/30", "2022/11/30/hello-world.md", "Hello World");
+insert("2022/11/30", "2022/11/30/hello-world.md", "Hello World", "test");
 
 // query_all();
 
@@ -78,6 +88,31 @@ function ajax_parser() {
   }
 }
 
+/**
+ * TODO: query in sql
+ * @param {*} category 
+ */
+function change_ctx_by_category(category) {
+  var article_list = document.getElementById("article-link-list");
+  var html = "";
+  switch (category) {
+    case "asm":
+      html += "<a href=\"javascript:change_ctx_by_name('archives/asm/note1');\">汇编语言学习笔记(一):内存与字节</a><br>";
+      html += "<a href=\"javascript:change_ctx_by_name('archives/asm/note2');\">汇编语言学习笔记(二):Intel 8086cpu的通用寄存器</a><br>";
+      html += "<a href=\"javascript:change_ctx_by_name('archives/asm/note3');\">汇编语言学习笔记(三):8086地址内存分配</a>";
+      break;
+    case "Information_theory":
+      html +=  "<a href=\"javascript:change_ctx_by_name('archives/Information_Theory/note1');\">信息论学习笔记(一):认识通信系统</a><br>";
+      html +=  "<a href=\"javascript:change_ctx_by_name('archives/Information_Theory/note2');\">信息论学习笔记(二):离散无噪声系统</a><br>";
+      break;
+    case "algo":
+      html += "<a href=\"javascript:change_ctx_by_name('archives/algo/Euclidean');\">深入算法:从0开始证明欧几里得算法</a><br>";
+      break;
+  }
+  article_list.innerHTML = html;
+}
+
+// TODO
 function change_ctx_by_month(months) {
   /**
    * 
