@@ -13,7 +13,7 @@ async def create_pool(loop, **kw):
     user = kw['user'],
     password = kw['password'],
     db = kw['db'],
-    charset = kw.get('charset', 'utf-8'),
+    charset = kw.get('charset', 'utf8'),
     autocommit = kw.get('autocommit', True), # 自动提交模式
     maxsize = kw.get('maxsize', 10),
     minsize = kw.get('minsize', 1),
@@ -124,7 +124,7 @@ class ModelMetaclass(type):
     attrs['__update__'] = 'update `%s` set `%s` where `%s` = ?' % (tableName, ', '.join(map(lambda f: '`%s`=?' % (mappings.get(f).name or f), fields)), primaryKey)
     return type.__new__(cls, name, bases, attrs)
 
-class Model(dict, ModelMetaclass):
+class Model(dict, metaclass=ModelMetaclass):
   def __init__(self, **kw):
     super(Model, self).__init__(**kw)
 
