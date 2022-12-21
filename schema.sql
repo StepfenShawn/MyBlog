@@ -44,3 +44,6 @@ create table comments (
   key `idx_created_at` (`created_at`),
   primary key (`id`)
 ) engine=innodb default charset=utf8;
+
+insert into users (name, email) 
+values ("Stepfen Shawn", "m18824909883@163.com");

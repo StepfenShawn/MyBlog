@@ -3,10 +3,12 @@ logging.basicConfig(level=logging.INFO)
 import asyncio, os, json, time
 from datetime import datetime
 
+import inspect
 from aiohttp import web
 from jinja2 import Environment, FileSystemLoader
 import orm
 from coroweb import add_route, add_static
+from handle import index  
 
 def init_jinja2(app, **kw):
   logging.info('init jinja2...')
@@ -56,7 +58,7 @@ async def response_factory(app, handler):
     if isinstance(r, dict):
       template = r.get('__template__')
       # json type
-      if template is not None:
+      if template is None:
         resp = web.Response(body=json.dumps(r, ensure_ascii=False, default=lambda o : o.__dict__).encode('utf-8'))
         resp.content_type = 'application/json;charset=utf-8'
         return resp
@@ -78,18 +80,20 @@ async def response_factory(app, handler):
     return resp
   return response
 
-
-@asyncio.coroutine
 async def init(loop):
   await orm.create_pool(loop=loop, host='127.0.0.1', port=3306, user='root', password='root', db='awesome')
-  app = web.Application(loop=loop, middlewares=[
-    logger_factory, response_factory
+  app = web.Application(middlewares=[
+    logger_factory ,response_factory
   ])
   init_jinja2(app)
+  add_route(app, index)
   add_static(app)
-  srv = await loop.create_server(app.make_handler(), '127.0.0.1', '9000')
+
+  app_runner = web.AppRunner(app)
+  await app_runner.setup()
+  site = web.TCPSite(app_runner, '127.0.0.1', '9000')
   logging.info('server started at http://127.0.0.1:9000')
-  return srv
+  await site.start()
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(init(loop))

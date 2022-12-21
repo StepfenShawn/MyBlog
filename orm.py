@@ -75,12 +75,12 @@ class BooleanField(Field):
     super().__init__(name, 'boolean', False, defalut)
 
 class IntegerField(Field):
-  def __init__(self, name = None, primary_key = False, defalut = 0):
-    super().__init__(name, 'bigint', primary_key, defalut)
+  def __init__(self, name = None, primary_key = False, default = 0):
+    super().__init__(name, 'bigint', primary_key, default)
 
 class FloatField(Field):
-  def __init__(self, name = None, primary_key = False, defalut = 0.0):
-    super().__init__(name, 'real', primary_key, defalut)
+  def __init__(self, name = None, primary_key = False, default = 0.0):
+    super().__init__(name, 'real', primary_key, default)
 
 class TextField(Field):
   def __init__(self, name = None, default = None):
