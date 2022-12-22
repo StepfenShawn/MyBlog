@@ -4,3 +4,7 @@ class APIError(Exception):
     self.error = error
     self.data = data
     self.message = message
+
+class APIValueError(APIError):
+  def __init__(self, field, message=''):
+    super(APIValueError, self).__init__('value:invalid', field, message)

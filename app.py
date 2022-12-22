@@ -8,7 +8,7 @@ from aiohttp import web
 from jinja2 import Environment, FileSystemLoader
 import orm
 from coroweb import add_route, add_static
-from handle import index  
+from handle import handler_list  
 
 def init_jinja2(app, **kw):
   logging.info('init jinja2...')
@@ -99,7 +99,8 @@ async def init(loop):
     logger_factory ,response_factory
   ])
   init_jinja2(app, filters = dict(datetime = datetime_filter))
-  add_route(app, index)
+  for item in handler_list:
+    add_route(app, item)
   add_static(app)
 
   app_runner = web.AppRunner(app)
