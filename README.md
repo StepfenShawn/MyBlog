@@ -12,5 +12,5 @@ This is a simple website build in python and mysql.
 ```
 python app.py
 ```  
-Then the server will started at http://127.0.0.1:9000  
+Then the server will start at http://127.0.0.1:9000  
 enjoy it!  

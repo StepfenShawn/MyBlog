@@ -4,9 +4,14 @@ from coroweb import get, post
 from models import User, Comment, Blog, next_id
 from errors import *
 from aiohttp import web
+import markdown2
 
 COOKIE_NAME = 'blogsession'
 _COOKIE_KEY = 'blog'
+
+def text2html(text):
+  lines = map(lambda s: '<p>%s</p>' % s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;'), filter(lambda s: s.strip() != '', text.split('\n')))
+  return ''.join(lines)
 
 '''
 Generate cookie str by user.
@@ -48,12 +53,23 @@ async def index(request):
     Blog(id='2', name='Something New', summary=summary, created_at=time.time() - 3600),
     Blog(id='3', name='Learn Swift', summary=summary, created_at=time.time() - 7200)
   ]
-  if request.__user__:
-    print("here")
   return {
     '__template__': 'blogs.html',
     'blogs': blogs,
     '__user__' : request.__user__
+  }
+
+@get('/blog/{id}')
+async def get_blog(id):
+  blog = await Blog.find(id)
+  comments = await Comment.findAll('blog_id=?', [id], orderBy='created_at desc')
+  for c in comments:
+    c.html_content = text2html(c.content)
+  blog.html_content = markdown2.markdown(blog.content)
+  return {
+    '__template__' : 'blog.html',
+    'blog' : blog,
+    'comments' : comments
   }
 
 @get('/api/users')
@@ -73,6 +89,14 @@ async def register():
 async def signin():
   return {
     '__template__' : 'signin.html'
+  }
+
+@get('/manage/blogs/create')
+async def manage_create_blog():
+  return  {
+    '__template__' : 'blog_edit.html',
+    'id' : '',
+    'action' : '/api/blogs'
   }
 
 _RE_EMAIL = re.compile(r'^[a-z0-9\.\-\_]+\@[a-z0-9\-\_]+(\.[a-z0-9\-\_]+){1,4}$')
@@ -127,4 +151,26 @@ async def authenticate(*, email, passwd):
   r.body = json.dumps(user, ensure_ascii = False).encode('utf-8')
   return r
 
-handler_list = [index, api_get_users, register, signin, api_register_user, authenticate]
+@get('/api/blogs/{id}')
+async def api_get_blog(*, id):
+  blog = await Blog.find(id)
+  return blog
+
+@post('/api/blogs')
+async def api_create_blog(request, *, name, summary, content):
+  if not name or not name.strip():
+    raise APIValueError('name', 'name cannot be empty')
+  if not summary or not summary.strip():
+    raise APIValueError('summary', 'summary cannot be empty')
+  if not content or not content.strip():
+    raise APIValueError('content', 'content cannot be empty')
+  blog = Blog(user_id = request.__user__.id, user_name = request.__user__.name, 
+  user_image = request.__user__.image, name = name.strip(), summary = summary.strip(), 
+  content = content.strip())
+  await blog.save()
+  return blog
+
+handler_list = [index, api_get_users, register, signin, 
+                api_register_user, authenticate, api_create_blog,
+                manage_create_blog, get_blog
+              ]
