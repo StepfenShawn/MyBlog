@@ -2,7 +2,7 @@
 This is a simple website build in python and mysql.  
 # Features
 * Signin and Signup (done!)  
-* Post blog (todo)  
+* Post blog (done!)  
 * Count the visitors (todo)  
 * Comment and share (todo)  
 # build

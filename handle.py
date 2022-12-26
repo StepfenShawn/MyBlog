@@ -72,15 +72,11 @@ async def get_blog(id):
   for c in comments:
     c.html_content = text2html(c.content)
   blog.html_content = markdown2.markdown(blog.content)
-  # TODO: add a blog view page
-  """
   return {
-    '__template__' : 'blog.html',
+    '__template__' : 'blog_show.html',
     'blog' : blog,
     'comments' : comments
   }
-  """
-  return blog.html_content
 
 @get('/api/users')
 async def api_get_users():
