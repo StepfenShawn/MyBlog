@@ -4,6 +4,7 @@ from coroweb import get, post
 from models import User, Comment, Blog, next_id
 from errors import *
 from aiohttp import web
+from page import Page
 import markdown2
 
 COOKIE_NAME = 'blogsession'
@@ -12,6 +13,16 @@ _COOKIE_KEY = 'blog'
 def text2html(text):
   lines = map(lambda s: '<p>%s</p>' % s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;'), filter(lambda s: s.strip() != '', text.split('\n')))
   return ''.join(lines)
+
+def get_page_index(page_str):
+  p = 1
+  try:
+    p = int(page_str)
+  except ValueError as e:
+    pass
+  if p < 1:
+    p = 1
+  return p
 
 '''
 Generate cookie str by user.
@@ -91,6 +102,13 @@ async def signin():
     '__template__' : 'signin.html'
   }
 
+@get('/manage/blogs')
+async def manage_blogs(*, page = '1'):
+  return {
+    '__template__' : 'manage_blogs.html',
+    'page_index' : get_page_index(page)
+  }
+
 @get('/manage/blogs/create')
 async def manage_create_blog():
   return  {
@@ -156,6 +174,17 @@ async def api_get_blog(*, id):
   blog = await Blog.find(id)
   return blog
 
+@get('/api/blogs')
+async def api_blogs(*, page = '1'):
+  page_index = get_page_index(page)
+  # find the numbers of all blags
+  num = await Blog.findNumber('count(id)')
+  p = Page(num, page_index)
+  if num == 0:
+    return dict(page = p, blogs = ())
+  blogs = await Blog.findAll(orderBy='created_at desc', limit=(p.offset, p.limit))
+  return dict(page = p, blogs = blogs)
+
 @post('/api/blogs')
 async def api_create_blog(request, *, name, summary, content):
   if not name or not name.strip():
@@ -172,5 +201,5 @@ async def api_create_blog(request, *, name, summary, content):
 
 handler_list = [index, api_get_users, register, signin, 
                 api_register_user, authenticate, api_create_blog,
-                manage_create_blog, get_blog
+                manage_create_blog, get_blog, manage_blogs, api_blogs
               ]
