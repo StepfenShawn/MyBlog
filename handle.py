@@ -66,7 +66,7 @@ async def index(request):
   }
 
 @get('/blog/{id}')
-async def get_blog(id):
+async def get_blog(request, *, id):
   blog = await Blog.find(id)
   comments = await Comment.findAll('blog_id=?', [id], orderBy='created_at desc')
   for c in comments:
@@ -75,7 +75,8 @@ async def get_blog(id):
   return {
     '__template__' : 'blog_show.html',
     'blog' : blog,
-    'comments' : comments
+    'comments' : comments,
+    '__user__' : request.__user__
   }
 
 @get('/api/users')
@@ -194,7 +195,34 @@ async def api_create_blog(request, *, name, summary, content):
   await blog.save()
   return blog
 
+@get('/api/comments')
+async def api_comments(*, page = '1'):
+  page_index = get_page_index(page)
+  num = Comment.findNumber('count(id)')
+  p = Page(num, page_index)
+  if num == 0:
+    return dict(page = p, comments = ())
+  comments = await Comment.findAll(orderBy = 'created_at desc', limit=(p.offset, p.limit))
+  return dict(page=p, comments=comments)
+
+@post('/api/blogs/{id}/comments')
+async def api_create_comment(id, request, *, content):
+  user = request.__user__
+  if not content or not content.strip():
+      raise APIValueError('content')
+  blog = await Blog.find(id)
+  comment = Comment(blog_id=blog.id, user_id=user.id, user_name=user.name, user_image=user.image, content=content.strip())
+  await comment.save()
+  return comment
+
+@post('/api/blogs/{id}/delete')
+async def api_delate_blog(request, *, id):
+  blog = await Blog.find(id)
+  await blog.remove()
+  return dict(id=id)
+
 handler_list = [index, api_get_users, register, signin, 
                 api_register_user, authenticate, api_create_blog,
-                manage_create_blog, get_blog, manage_blogs, api_blogs
+                manage_create_blog, get_blog, manage_blogs, api_blogs,
+                api_delate_blog, api_create_comment
               ]

@@ -4,7 +4,8 @@ This is a simple website build in python and mysql.
 * Signin and Signup (done!)  
 * Post blog (done!)  
 * Count the visitors (todo)  
-* Comment and share (todo)  
+* Comment (done!)  
+* Share (todo) 
 # build
 * mysql 8.0
 * Python 3.9.4
