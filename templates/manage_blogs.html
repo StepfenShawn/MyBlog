@@ -20,7 +20,10 @@ function initVM(data) {
         if (confirm('Did you want to delete "' + blog.name + '"?')) {
           postJSON('/api/blogs/' + blog.id + '/delete', (err, r) => {
             if (err) {return alert(err.message || err.error || err);}
-            //refresh();
+            else {
+              location.reload();
+              alert('Successfully delete!');
+            }
           });
         }
       }

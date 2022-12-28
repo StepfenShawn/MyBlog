@@ -17,7 +17,10 @@
             var $form = $('#vm').find('form');
             $form.postJSON(action, this.$data, function (err, r) {
               if (err) return $form.showFormError(err);
-              return location.assign('/api/blogs/' + r.id);
+              else {
+                location.reload();
+                alert('Successfully created!');
+              }
             });
           }
         }
