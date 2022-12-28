@@ -54,10 +54,14 @@ async def signin():
 
 @get('/signout')
 async def signout(request : web_request.Request):
-  # TODO
-  return {
-    '__template__' : 'signin.html'
-  }
+  # remove session cookie (just set the max_age = -1000)
+  user = request.__user__
+  r = web.Response()
+  r.set_cookie(COOKIE_NAME, user2cookie(user, -1000), max_age = -1000, httponly = True)
+  user.passwd = '******'
+  r.content_type = 'text/html;charset=utf-8'
+  r.body = b'<script>location.reload();location.assign("/")</script>'
+  return r
 
 @get('/api/users')
 async def api_get_users():
