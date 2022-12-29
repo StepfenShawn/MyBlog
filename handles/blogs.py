@@ -90,3 +90,12 @@ async def api_delate_blog(request, *, id):
   blog = await Blog.find(id)
   await blog.remove()
   return dict(id=id)
+
+@post('/api/blogs/{id}/edit')
+async def api_edit_blog(**kwargs):
+  blog = await Blog.find(kwargs['id'])
+  blog.name = kwargs['name']
+  blog.summary = kwargs['summary']
+  blog.content = kwargs['content']
+  await blog.update()
+  return blog

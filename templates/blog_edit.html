@@ -15,13 +15,23 @@
           submit : function (event) {
             event.preventDefault();
             var $form = $('#vm').find('form');
-            $form.postJSON(action, this.$data, function (err, r) {
-              if (err) return $form.showFormError(err);
-              else {
-                location.reload();
-                alert('Successfully created!');
-              }
-            });
+            if (ID) {
+              $form.postJSON(action + "/" + ID + "/edit", this.$data, function (err, r) {
+                if (err) return $form.showFormError(err);
+                else {
+                  location.reload();
+                  alert('Successfully updated!')
+                }
+              });
+            } else {
+              $form.postJSON(action, this.$data, function (err, r) {
+                if (err) return $form.showFormError(err);
+                else {
+                  location.reload();
+                  alert('Successfully created!');
+                }
+              });
+            }
           }
         }
       });
