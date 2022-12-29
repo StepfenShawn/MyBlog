@@ -96,15 +96,15 @@ async def response_factory(app, handler):
 def datetime_filter(t):
   delta = int(time.time() - t)
   if delta < 60:
-    return "1分钟前"
+    return "1 mins ago"
   if delta < 3600:
-    return '%s分钟前' % (delta // 60)
+    return '%s mins ago' % (delta // 60)
   if delta < 86400:
-    return '%s小时前' % (delta // 3600)
+    return '%s hours ago' % (delta // 3600)
   if delta < 604800:
-    return '%s天前' % (delta // 86400)
+    return '%s days ago' % (delta // 86400)
   dt = datetime.fromtimestamp(t)
-  return '%s年%s月%s日' % (dt.year, dt.month, dt.day)
+  return '%s-%s-%s' % (dt.year, dt.month, dt.day)
 
 async def init(loop):
   await orm.create_pool(loop=loop, host='127.0.0.1', port=3306, user='root', password='root', db='awesome')

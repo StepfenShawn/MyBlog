@@ -47,6 +47,14 @@ async def manage_create_blog():
     'action' : '/api/blogs'
   }
 
+@get('/manage/blogs/edit/{id}')
+async def manage_edit_blog(*, id):
+  return {
+    '__template__' : 'blog_edit.html',
+    'id' : id,
+    'action' : '/api/blogs'
+  }
+
 @get('/api/blogs/{id}')
 async def api_get_blog(*, id):
   blog = await Blog.find(id)

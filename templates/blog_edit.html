@@ -33,7 +33,7 @@
         getJSON('/api/blogs/' + ID, function (err, r) {
           if (err) return fatal(err);
           $('#loading').hide();
-          initVM(blog);
+          initVM(r);
         });
       } else {
         $('#loading').hide();

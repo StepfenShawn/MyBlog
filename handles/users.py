@@ -121,3 +121,12 @@ async def authenticate(*, email, passwd):
   r.content_type = 'application/json'
   r.body = json.dumps(user, ensure_ascii = False).encode('utf-8')
   return r
+
+@get('/user/{id}')
+async def get_user(request, *, id):
+  user = await User.find(id)
+  return {
+    '__template__' : 'user.html',
+    'user' : user,
+    '__user__' : request.__user__
+  }
