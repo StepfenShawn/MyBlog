@@ -5,6 +5,11 @@ from aiohttp import web
 from errors import APIError
 
 '''
+A set include all the handler functions (define by @get and @post)
+'''
+handle_list = set()
+
+'''
 Define decorator @get('/path')
 '''
 def get(path):
@@ -14,6 +19,7 @@ def get(path):
       return func(*args, **kw)
     wrapper.__method__ = 'GET'
     wrapper.__route__ = path
+    handle_list.add(wrapper)
     return wrapper
   return decorator
 
@@ -27,6 +33,7 @@ def post(path):
       return func(*args, **kw)
     wrapper.__method__ = 'POST'
     wrapper.__route__ = path
+    handle_list.add(wrapper)
     return wrapper
   return decorator
 

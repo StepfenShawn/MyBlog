@@ -3,12 +3,13 @@ logging.basicConfig(level=logging.INFO)
 import asyncio, os, json, time
 from datetime import datetime
 
-import inspect
 from aiohttp import web, web_request
 from jinja2 import Environment, FileSystemLoader
 import orm
-from coroweb import add_route, add_static
-from handle import COOKIE_NAME, cookie2user, handler_list  
+from handles.users import *
+from handles.comments import *
+from handles.blogs import *
+from coroweb import add_route, add_static, handle_list
 
 def init_jinja2(app, **kw):
   logging.info('init jinja2...')
@@ -109,10 +110,10 @@ def datetime_filter(t):
 async def init(loop):
   await orm.create_pool(loop=loop, host='127.0.0.1', port=3306, user='root', password='root', db='awesome')
   app = web.Application(middlewares=[
-    logger_factory,  auto_factory, response_factory
+    logger_factory, auto_factory, response_factory
   ])
   init_jinja2(app, filters = dict(datetime = datetime_filter))
-  for item in handler_list:
+  for item in handle_list:
     add_route(app, item)
   add_static(app)
 

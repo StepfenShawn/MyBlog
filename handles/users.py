@@ -123,7 +123,7 @@ async def authenticate(*, email, passwd):
   return r
 
 @get('/user/{id}')
-async def get_user(request, *, id):
+async def get_user(id, *, request):
   user = await User.find(id)
   return {
     '__template__' : 'user.html',
