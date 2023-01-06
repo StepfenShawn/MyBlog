@@ -6,5 +6,6 @@
 {% endblock %}
 
 {% block content %}
-
+  <h1>{{user.name}}</h1><br>
+  <p>Join in {{user.created_at | datetime}}</p>
 {% endblock %}
