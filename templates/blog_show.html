@@ -54,7 +54,7 @@ $(function () {
             <textarea rows="6" placeholder="..." style="width:100%;resize:none;"></textarea>
           </div>
           <div class="uk-form-row">
-            <button type="submit" class="uk-button uk-button-primary"><i class="uk-icon-comment"></i> Create comment</button>
+            <button type="submit" class="uk-button uk-button-primary"><i uk-icon="icon:comment"></i> Create comment</button>
           </div>
         </form>
       </div>
@@ -71,10 +71,10 @@ $(function () {
           <header class="uk-comment-header">
             <img class="uk-comment-avatar uk-border-circle" width="50" height="50" src="{{ comment.user_image }}">
             <h4 class="uk-comment-title">{{ comment.user_name }} {% if comment.user_id==blog.user_id %}(Author){% else %}(Vistor){% endif %}</h4>
-            <p class="uk-comment-meta">{{ comment.created_at|datetime }}</p>
+            <p class="uk-comment-meta">{{ comment.created_at | datetime }}</p>
           </header>
           <div class="uk-comment-body">
-            {{ comment.html_content|safe }}
+            {{ comment.html_content | safe }}
           </div>
         </article>
       </li>

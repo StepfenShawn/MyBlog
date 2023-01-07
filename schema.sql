@@ -12,6 +12,7 @@ create table users (
   `name` varchar(50) not null,
   `image` varchar(500) not null,
   `created_at` real not null,
+  `location` varchar(50),
   unique key `idx_email` (`email`),
   key `idx_created_at` (`created_at`),
   primary key (`id`)
@@ -38,6 +39,7 @@ create table comments (
   `user_image` varchar(500) not null,
   `content` mediumtext not null,
   `created_at` real not null,
+  `like` varchar(50),
   key `idx_created_at` (`created_at`),
   primary key (`id`)
 ) engine=innodb default charset=utf8;

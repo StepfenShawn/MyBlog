@@ -1,0 +1,92 @@
+{% extends '__base__.html' %}
+
+{% block title %} User setting {% endblock %}
+
+{% block beforehead %}
+<script>
+  function initVM(data) {
+    console.log(data.users)
+    var vm = new Vue({
+      el : '#vm',
+      data : {
+        users : data.users,
+        page: data.page
+      },
+      methods : {
+        remove_user : function (user) {
+          if (confirm('Did you want to delete "' + user.name + "\"?")) {
+            postJSON('/api/users/' + user.id + '/delete', (err, r) => {
+              if (err) return alert(err.message);
+              else {
+                location.reload();
+                alert('Successfully delete!');
+              }
+            });
+          }
+        },
+        datetime : function(time) {
+          var d = new Date(time * 1000);
+          return d.toLocaleString();
+        }
+      }
+    });
+    $('#vm').show();
+  }
+
+  $(function() {
+    getJSON('/api/users', {
+      page : '{{page_index}}'
+    }, (err, res) => {
+      if (err) return fatal(err);
+      $('#loading').hide();
+      initVM(res);
+    });
+  });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="uk-width-1-1 uk-margin-bottom">
+  <div class="uk-panel uk-panel-box">
+    <ul class="uk-breadcrumb">
+      <li><a href="/manage/comments">Comments</a></li>
+      <li class="/manage/blogs"><span>Blogs</span></li>
+      <li><a href="uk-active">User</a></li>
+    </ul>
+  </div>
+</div>
+
+<div id="error", class="uk-width-1-1">
+</div>
+
+<div id="loading" class = "uk-width-1-1 uk-text-center">
+  <span><div uk-spinner></div> Loading...</span>
+</div>
+
+<div id="vm" class="uk-width-1-1">
+  <table class="uk-table uk-table-hover">
+    <thead>
+      <tr>
+        <th class="uk-width-3-6"> Name </th>
+        <th class="uk-width-1-6"> Create at </th>
+        <th class="uk-width-2-6"> Operation </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-repeat="user: users">
+        <td>
+          <a target="_blank" v-attr="href: '/user/'+user.id" v-text="user.name"></a>
+        </td>
+        <td>
+          <span v-text="datetime(user.created_at)"></span>
+        </td>
+        <td>
+          <a target="_blank" v-attr="href: '/manage/users/edit/' + user.id"><i uk-icon="icon: file-edit"></i>
+          <a href="#0" v-on="click: remove_user(user)"><i uk-icon="icon: trash"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div v-component="pagination" v-with="page"></div>
+</div>
+{% endblock %}

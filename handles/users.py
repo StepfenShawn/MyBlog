@@ -4,6 +4,7 @@ from coroweb import get, post
 from models import User, next_id
 from errors import *
 from aiohttp import web, web_request
+from .page import get_page_index
 
 COOKIE_NAME = 'blogsession'
 _COOKIE_KEY = 'blog'
@@ -41,13 +42,13 @@ async def cookie2user(cookie_str):
     return None
 
 @get('/register')
-async def register():
+async def register(request : web_request.Request):
   return {
     '__template__' : 'register.html'
   }
 
 @get('/signin')
-async def signin():
+async def signin(request : web_request.Request):
   return {
     '__template__' : 'signin.html'
   }
@@ -87,7 +88,7 @@ async def api_register_user(*, email, name, passwd):
   uid = next_id()
   sha1_passwd = '%s:%s' % (uid, passwd)
   user = User(id = uid, name = name.strip(), email = email, passwd=hashlib.sha1(sha1_passwd.encode('utf-8')).hexdigest(), 
-      image='http://gravatar.zeruns.tech/avatar/%s?d=mm&s=120' % hashlib.md5(email.encode('utf-8')).hexdigest())
+      image='/static/img/defalut_avatar.png')
   await user.save()
   # make session cookie
   r = web.Response()
@@ -123,10 +124,18 @@ async def authenticate(*, email, passwd):
   return r
 
 @get('/user/{id}')
-async def get_user(id, *, request):
+async def get_user(id, request, **kw):
   user = await User.find(id)
   return {
     '__template__' : 'user.html',
     'user' : user,
+    '__user__' : request.__user__
+  }
+
+@get('/manage/users')
+async def manage_users(request, *, page = '1', **kw):
+  return {
+    '__template__' : 'manage_user.html',
+    'page_index' : get_page_index(page),
     '__user__' : request.__user__
   }
