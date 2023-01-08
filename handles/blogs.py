@@ -1,5 +1,5 @@
 from coroweb import get, post
-from models import Comment, Blog
+from models import Comment, Blog, Website
 from errors import *
 from aiohttp import web
 from .page import Page, get_page_index
@@ -21,6 +21,8 @@ async def index(request):
 @get('/blog/{id}')
 async def get_blog(request, *, id):
   blog = await Blog.find(id)
+  blog.vistors += 1
+  await blog.update()
   comments = await Comment.findAll('blog_id=?', [id], orderBy='created_at desc')
   for c in comments:
     c.html_content = text2html(c.content)

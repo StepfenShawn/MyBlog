@@ -1,5 +1,5 @@
 import time, uuid
-from orm import Model, StringField, BooleanField, FloatField, TextField
+from orm import Model, StringField, BooleanField, FloatField, TextField, IntegerField, MediumBlobField 
 
 def next_id():
   return '%015d%s000' % (int(time.time() * 1000), uuid.uuid4().hex)
@@ -15,6 +15,12 @@ class User(Model):
   image = StringField(ddl='varchar(500)')
   created_at = FloatField(default=time.time)
 
+class PersonPhoto(Model):
+  __table__ = 'preson_photoes'
+  
+  user_id = StringField(primary_key=True, default=next_id, ddl='vrchar(50)')
+  image = MediumBlobField()
+
 class Blog(Model):
   __table__ = 'blogs'
 
@@ -26,6 +32,8 @@ class Blog(Model):
   summary = StringField(ddl='varchar(200)')
   content = TextField()
   created_at = FloatField(default=time.time)
+  vistors = IntegerField(default=0)
+  likes = IntegerField(default=0)
 
 class Comment(Model):
   __table__ = 'comments'
@@ -37,3 +45,10 @@ class Comment(Model):
   user_image = StringField(ddl='varchar(500)')
   content = TextField()
   created_at = FloatField(default=time.time)
+  likes = IntegerField(default=0)
+
+class Website(Model):
+  __table__ = 'website'
+
+  id = StringField(primary_key=True, default=next_id)
+  vistors = IntegerField(default=0)

@@ -26,7 +26,7 @@
                   <li class="uk-active"><a href="/"><i uk-icon="icon: home"></i>Home</a></li>
                   {% if __user__ %}
                   <li class="uk-parent data-uk-dropdown">
-                    <a href="#0"><i uk-icon="icon: user"></i> {{ __user__.name }}</a>
+                    <a href="/user/{{__user__.id}}"><i uk-icon="icon: user"></i> {{ __user__.name }}</a>
                   </li>
                   <li><a href="/signout"><i uk-icon ="sign-out"></i>Sign out</a></li>
                   {% else %}
@@ -38,7 +38,7 @@
             </div>
           </nav>
       </div>
-  
+
   </div>
 
     <div class="uk-container uk-container-center">
@@ -48,6 +48,8 @@
         {% endblock %}
         <!-- // content -->
       </div>
+      {% block other %}
+      {% endblock %}
     </div>
 
     <div class="uk-margin-large-top" style="background-color:#eee; border-top:1px solid #ccc;">

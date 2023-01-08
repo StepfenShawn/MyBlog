@@ -5,7 +5,17 @@
 {% block beforehead %}
 {% endblock %}
 
-{% block content %}
-  <h1>{{user.name}}</h1><br>
-  <p>Join in {{user.created_at | datetime}}</p>
+{% block other %}
+  <h1>{{user.name}}</h1>
+  <div class="uk-panel">
+    <img class="uk-align-center uk-align-right@m uk-margin-remove-adjacent" src="{{user.image}}" width="225" height="150">
+    <p>Joined at {{user.created_at | datetime}}</p>
+    <p>Email: {{user.email}}</p>
+    {% if user.location %}
+      <p>Location: {{user.location}}</p>
+    {% endif %}
+    {% if __user__.id == user.id %}
+      <i uk-icon = "icon: settings"></i><a href="">Settings</a>
+    {% endif %}
+</div>
 {% endblock %}
