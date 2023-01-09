@@ -14,6 +14,7 @@ class User(Model):
   name = StringField(ddl='varchar(50)')
   image = StringField(ddl='varchar(500)')
   created_at = FloatField(default=time.time)
+  location = StringField(ddl='varchar(50)')
 
 class PersonPhoto(Model):
   __table__ = 'preson_photoes'

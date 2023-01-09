@@ -1,0 +1,80 @@
+{% extends '__base__.html' %}
+
+{% block title %} Settings {% endblock %}
+
+{% block beforehead %}
+  <script>
+    var ID = '{{ id }}'
+    var action = '{{ action }}';
+
+    function initVM(user) {
+      var vm = new Vue({
+        el : '#vm',
+        data : user,
+        methods : {
+          submit: function (event) {
+            event.preventDefault();
+            console.log(this.$data)
+            var $form = $('#vm').find('form');
+            $form.postJSON(action + ID + '/edit', this.$data, function (err, r) {
+              if (err) return $form.showFormError(err);
+              else {
+                location.reload();
+                alert('Successfully updated!');
+              }
+            });
+          }
+        }
+      });
+      $('#vm').show();
+    }
+
+
+    $(function () {
+      getJSON('/api/users/' + ID, function (err, r) {
+        if (err) return fatal(err);
+        $('#loading').hide();
+        initVM(r);
+      });
+    });
+  </script>
+{% endblock %}
+
+{% block other %}
+  <div id="error" class="uk-width-1-1">
+  </div>
+
+  <div id="loading" class="uk-width-1-1 uk-text-center">
+    <span><i class="uk-icon-spinner uk-icon-medium uk-icon-spin"></i> Loading...</span>
+  </div>
+
+  <div id="vm">
+    <form v-on="submit: submit" class="uk-form uk-form-stacked">
+      <div class="uk-alert uk-alert-danger uk-hidden"></div>
+
+      <div class="uk-margin">
+        <div class="uk-inline">
+          <label class="uk-form-label">Location:</label>
+          <span class="uk-form-icon"></span>
+          <input v-model="location" name="location" placeholder="Location" maxlength="30"
+                  class="uk-input" type="text" aria-label="Not clickable icon">
+        </div>
+      </div>
+
+      <div class="uk-margin">
+        <div class="uk-inline">
+          <label class="uk-form-label">Avatar:</label>
+          <textarea v-model="image" rows="16" cols="30" name="image" placeholder="Avatar(url)" class="uk-width-1-1" style="resize:none;"></textarea>
+        </div>
+      </div>
+
+      <div class="uk-margin">
+        <div class="uk-inline">
+          <button type="submit" class="uk-width-1-1 uk-button uk-button-primary uk-button-large">
+            <i uk-icon="check"></i> Change
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}

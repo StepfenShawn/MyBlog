@@ -15,7 +15,7 @@
       <p>Location: {{user.location}}</p>
     {% endif %}
     {% if __user__.id == user.id %}
-      <i uk-icon = "icon: settings"></i><a href="">Settings</a>
+      <i uk-icon = "icon: settings"></i><a href="/user/{{user.id}}/edit">Settings</a>
     {% endif %}
 </div>
 {% endblock %}

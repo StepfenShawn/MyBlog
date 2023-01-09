@@ -71,6 +71,19 @@ async def api_get_users():
     u.passwd = '******'
   return dict(users=users)
 
+@get('/api/users/{id}')
+async def api_get_users_by_id(*, id):
+  user = await User.find(id)
+  return user
+
+@post('/api/users/{id}/edit')
+async def api_edit_users(id, location, image, request, **kw):
+  user = await User.find(id)
+  user.location = location
+  user.image = image
+  await user.update()
+  return user
+
 _RE_EMAIL = re.compile(r'^[a-z0-9\.\-\_]+\@[a-z0-9\-\_]+(\.[a-z0-9\-\_]+){1,4}$')
 _RE_SHA1 = re.compile(r'^[0-9a-f]{40}$')
 
@@ -138,4 +151,13 @@ async def manage_users(request, *, page = '1', **kw):
     '__template__' : 'manage_user.html',
     'page_index' : get_page_index(page),
     '__user__' : request.__user__
+  }
+
+@get('/user/{id}/edit')
+async def user_setting(id, request, **kw):
+  return {
+    '__template__' : 'user_setting.html',
+    '__user__' : request.__user__,
+    'id' : id,
+    'action' : '/api/users/'
   }
