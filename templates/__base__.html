@@ -5,6 +5,19 @@
     {% block meta %}  {% endblock %}
     <title>{% block title %} ? {% endblock %} - Blog list</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.2.2/dist/css/uikit.min.css" />
+    <style type="text/css">
+      .new_button {
+        position:fixed;
+        right:10px;
+        bottom:40px;
+        background-color: #1e87f0;
+        border-radius:45px;
+        cursor:pointer;
+        width:70px;
+        height:70px;
+        text-align: center;
+      }
+    </style>
     <!-- UIkit JS -->
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.2.2/dist/js/uikit.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.2.2/dist/js/uikit-icons.min.js"></script>
@@ -17,6 +30,12 @@
   </head>
 
   <body>
+    <div id="new_blog" class="new_button">
+      <script>
+        $('#new_blog').click(() => {location.assign('/manage/blogs/create');});
+      </script>
+      <p style="color: white;"><i uk-icon = "icon:plus"></i>New</p>
+    </div>
     <div class="uk-section-primary uk-preserve-color">
       <div uk-sticky="start: 200; animation: uk-animation-slide-top; sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; cls-inactive: uk-navbar-transparent uk-light">
           <nav class="uk-navbar-container">
@@ -34,6 +53,12 @@
                   <li><a href="/register"><i uk-icon="icon: user"></i> Sign up</a></li>
                   {% endif %}
                 </ul>
+                <div class="uk-navbar-right uk-navbar-item">
+                  <form class="uk-search uk-search-default">
+                    <span uk-search-icon></span>
+                    <input class="uk-search-input" type="search" placeholder="Search..." aria-label="Search">
+                  </form>
+                </div>
               </div>
             </div>
           </nav>
@@ -56,10 +81,10 @@
       <div class="uk-container uk-container-center uk-text-center">
         <div class="uk-panel uk-margin-top uk-margin-bottom">
           <div>
-            &copy; Copyright 2022 Stepfen Shawn<br>
+            &copy; Copyright 2023 Stepfen Shawn<br>
             Powered by <a href="https://github.com/StepfenShawn" target="_blank">Shawn</a>
           </div>
-          <a target="_blank" href="http://www.w3.org/TR/html5/"><i class="uk-icon-html5" style="font-size:64px; color: #444;"></i></a>
+          <a target="_blank" href="https://getuikit.com/"><i uk-icon="icon: uikit" style="font-size:64px; color: #444;"></i></a>
         </div>
       </div>
     </div>

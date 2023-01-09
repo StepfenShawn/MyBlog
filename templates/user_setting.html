@@ -54,9 +54,18 @@
 
       <div class="uk-margin">
         <div class="uk-inline">
-          <label class="uk-form-label">Location:</label>
+          <label class="uk-form-label">Location: </label>
           <span class="uk-form-icon"></span>
           <input v-model="location" name="location" placeholder="Location" maxlength="30"
+                  class="uk-input" type="text" aria-label="Not clickable icon">
+        </div>
+      </div>
+
+      <div class="uk-marigin">
+        <div class="uk-inline">
+          <label class="uk-form-label">Name: </label>
+          <span class="uk-form-icon"></span>
+          <input v-model="name" name="name" placeholder="Username" maxlength="50"
                   class="uk-input" type="text" aria-label="Not clickable icon">
         </div>
       </div>

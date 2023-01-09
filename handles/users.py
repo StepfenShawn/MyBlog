@@ -77,10 +77,11 @@ async def api_get_users_by_id(*, id):
   return user
 
 @post('/api/users/{id}/edit')
-async def api_edit_users(id, location, image, request, **kw):
+async def api_edit_users(id, location, image, name, request, **kw):
   user = await User.find(id)
   user.location = location
   user.image = image
+  user.name = name
   await user.update()
   return user
 
