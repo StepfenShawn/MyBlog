@@ -200,6 +200,12 @@ class Model(dict, metaclass=ModelMetaclass):
       return None
     return cls(**rs[0])
 
+  # find object by using the 'find-like' in sql
+  @classmethod
+  async def find_use_like(cls, column, what):
+    rs = await select('%s where `%s` like ?' % (cls.__select__, column), ['%' + what + '%'])
+    return [cls(**r) for r in rs]
+
   async def save(self):
     args = list(map(self.getValueOrDefalut, self.__fields__))
     args.append(self.getValueOrDefalut(self.__primary_key__))

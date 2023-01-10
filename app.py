@@ -9,6 +9,7 @@ import orm
 from handles.users import *
 from handles.comments import *
 from handles.blogs import *
+from handles.search import *
 from coroweb import add_route, add_static, handle_list
 
 def init_jinja2(app, **kw):

@@ -1,0 +1,14 @@
+{% extends '__base__.html' %}
+{% block title %} result {% endblock %}
+
+{% block content %}
+  {% for blog in result_list %}
+  <article class="uk-article">
+    <h2><a href="/blog/{{blog.id}}">{{blog.name}}</a></h2>
+    <p class="uk-article-meta">Created at {{ blog.created_at | datetime }}, vistors : {{ blog.vistors }}</p>
+    <p>{{ blog.summary }}</p>
+    <p><a href="/blog/{{ blog.id }}">More <i uk-icon="icon: chevron-double-right"></i></a></p>
+  </article>
+  <hr class="uk-article-divider">
+  {% endfor %}
+{% endblock %}
