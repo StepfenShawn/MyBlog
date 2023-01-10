@@ -3,7 +3,7 @@ from models import Comment, Blog, Website
 from errors import *
 from aiohttp import web
 from .page import Page, get_page_index
-import markdown2
+import markdown
 
 def text2html(text):
   lines = map(lambda s: '<p>%s</p>' % s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;'), filter(lambda s: s.strip() != '', text.split('\n')))
@@ -26,7 +26,8 @@ async def get_blog(request, *, id):
   comments = await Comment.findAll('blog_id=?', [id], orderBy='created_at desc')
   for c in comments:
     c.html_content = text2html(c.content)
-  blog.html_content = markdown2.markdown(blog.content)
+  blog.html_content = markdown.markdown(blog.content, extensions=['markdown.extensions.codehilite', 
+                        'markdown.extensions.fenced_code', 'markdown.extensions.tables'])
   return {
     '__template__' : 'blog_show.html',
     'blog' : blog,

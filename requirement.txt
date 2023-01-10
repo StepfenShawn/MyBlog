@@ -1,4 +1,4 @@
-markdown2
+markdown
 aiohttp
 aiomysql
 jinja2
