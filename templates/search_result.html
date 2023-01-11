@@ -2,13 +2,40 @@
 {% block title %} result {% endblock %}
 
 {% block content %}
-  {% for blog in result_list %}
-  <article class="uk-article">
-    <h2><a href="/blog/{{blog.id}}">{{blog.name}}</a></h2>
-    <p class="uk-article-meta">Created at {{ blog.created_at | datetime }}, vistors : {{ blog.vistors }}</p>
-    <p>{{ blog.summary }}</p>
-    <p><a href="/blog/{{ blog.id }}">More <i uk-icon="icon: chevron-double-right"></i></a></p>
-  </article>
-  <hr class="uk-article-divider">
-  {% endfor %}
+  <ul class="uk-subnav uk-subnav-pill" uk-switcher="animation: uk-animation-fade">
+    <li><a href="#">Blogs</a></li>
+    <li><a href="#">Users</a></li>
+    <li><a href="#">Comments</a></li>
+  </ul>
+
+  <ul class="uk-switcher uk-margin">
+    <li>
+      <h3>We find the kwyowrd " {{content}} " in such blogs: </h3>
+      {% for blog in blog_rs %}
+      <article class="uk-article">
+        <h2><a href="/blog/{{blog.id}}">{{blog.name}}</a></h2>
+        <p class="uk-article-meta">Created at {{ blog.created_at | datetime }}, vistors : {{ blog.vistors }}</p>
+        <p>{{ blog.summary }}</p>
+        <p><a href="/blog/{{ blog.id }}">More <i uk-icon="icon: chevron-double-right"></i></a></p>
+      </article>
+      <hr class="uk-article-divider">
+      {% endfor %}
+    </li>
+    <li>
+      <h3>We find the kwyowrd " {{content}} " in such users: </h3>
+      {% for user in user_rs %}
+        <div class="uk-card uk-card-default uk-card-body uk-width-1-1@m">
+          <h3 class="uk-card-title">{{user.name}}</h3>
+          <p>{{user.email}}</p>
+          <p><a href="/user/{{user.id}}">To see the user info >></a></p>
+        </div>
+      {% endfor %}
+    </li>
+    <li>
+      <h3>We find the keyword " {{content}} " in such comments: </h3>
+      {% for comment in comment_rs %}
+      
+      {% endfor %}
+    </li>
+  </ul>
 {% endblock %}

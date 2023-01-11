@@ -26,7 +26,21 @@
     <script src = "/static/js/util.js"></script>
     <script src = "/static/js/vue.min.js"></script>
     <script src = "/static/js/sticky.min.js"></script>
+
+    <script>
+      window.onload = function() {
+       var SearchVM = new Vue({
+        el : "#search_form",
+        methods: {
+          search : function () {
+            location.assign('/search/' + this.content)
+          }
+        }
+       });
+      }
+    </script>
     {% block beforehead %} {% endblock %}
+
   </head>
 
   <body>
@@ -54,9 +68,9 @@
                   {% endif %}
                 </ul>
                 <div class="uk-navbar-right uk-navbar-item">
-                  <form class="uk-search uk-search-default">
+                  <form id = "search_form" v-on="search: search" class="uk-search uk-search-default">
                     <span uk-search-icon></span>
-                    <input class="uk-search-input" type="search" placeholder="Search..." aria-label="Search">
+                    <input v-model="content" id="search_input" type="search" class="uk-search-input" placeholder="Search...">
                   </form>
                 </div>
               </div>
